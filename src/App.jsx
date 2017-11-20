@@ -3,12 +3,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { MuiThemeProvider } from 'material-ui';
+import { AppBar, MuiThemeProvider } from 'material-ui';
 import SearchBar from './SearchBar';
+import GMap from './GMap';
 
 const App = () => (
   <MuiThemeProvider>
-    <SearchBar />
+    <div>
+      <AppBar
+        title="Welcome to the most comprehensive housing search site for Seattle!"
+        showMenuIconButton={false}
+      />
+      <SearchBar />
+      <GMap />
+    </div>
   </MuiThemeProvider>
 );
 
