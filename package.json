@@ -24,6 +24,7 @@
   "homepage": "https://github.com/zhuhan0/CIS550-Project#readme",
   "dependencies": {
     "react": "^16.1.1",
+    "react-bootstrap": "^0.31.5",
     "react-dom": "^16.1.1"
   },
   "devDependencies": {
