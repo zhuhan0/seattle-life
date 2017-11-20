@@ -1,5 +1,5 @@
 import React from 'react';
-import { AutoComplete, Paper, Toolbar, ToolbarGroup } from 'material-ui';
+import { AutoComplete, FontIcon, Paper, Toolbar, ToolbarGroup } from 'material-ui';
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -11,7 +11,12 @@ class SearchBar extends React.Component {
 
   render() {
     return (
-      <Paper zDepth={2}>
+      <Paper
+        style={{
+          width: '50%',
+        }}
+        zDepth={2}
+      >
         <Toolbar>
           <ToolbarGroup>
             <AutoComplete
@@ -21,6 +26,9 @@ class SearchBar extends React.Component {
                 width: '400px',
               }}
             />
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <FontIcon className="material-icons">search</FontIcon>
           </ToolbarGroup>
         </Toolbar>
       </Paper>
