@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { AppBar, MuiThemeProvider } from 'material-ui';
-import SearchBar from './SearchBar';
+import SearchBar from './SearchBar/SearchBar';
 import GMap from './GMap';
 
 const App = () => (

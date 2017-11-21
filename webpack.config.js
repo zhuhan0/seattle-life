@@ -13,7 +13,19 @@ var config = {
   },
   module: {
     rules: [
-      { test: /\.(jsx)$/, use: 'babel-loader' },
+      {
+        test: /\.(jsx)$/,
+        loader: 'babel-loader',
+        query: {
+          plugins: [
+            'transform-class-properties',
+          ],
+          presets: [
+            'env',
+            'react',
+          ],
+        },
+      },
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },
     ],
   },
