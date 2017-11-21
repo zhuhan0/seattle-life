@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
+import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
 
 const GMap = compose(
@@ -10,7 +10,7 @@ const GMap = compose(
       <div
         style={{
           position: 'absolute',
-          height: '100%',
+          height: '87%',
           width: '100%',
         }}
       >
@@ -23,19 +23,12 @@ const GMap = compose(
   withGoogleMap,
 )(props => (
   <GoogleMap
-    defaultZoom={8}
+    defaultZoom={12}
     defaultCenter={{
       lat: 47.608013,
       lng: -122.335167,
     }}
-  >
-    <Marker
-      position={{
-        lat: 47.608013,
-        lng: -122.335167,
-      }}
-    />
-  </GoogleMap>
+  />
 ));
 
 export default GMap;

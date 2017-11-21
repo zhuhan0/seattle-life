@@ -11,7 +11,7 @@ const App = () => (
   <MuiThemeProvider>
     <div>
       <AppBar
-        title="Welcome to the most comprehensive housing search site for Seattle!"
+        title="Welcome to the most comprehensive Seattle housing search site!"
         showMenuIconButton={false}
       />
       <SearchBar />
