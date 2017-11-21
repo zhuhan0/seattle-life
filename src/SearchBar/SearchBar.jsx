@@ -1,6 +1,6 @@
 import React from 'react';
 import { AutoComplete, FontIcon, Paper, Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui';
-import ToggleTabs from './ToggleTabs';
+import ToggleButtons from './ToggleButtons';
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -25,7 +25,11 @@ class SearchBar extends React.Component {
                 width: '410px',
               }}
             />
-            <ToggleTabs />
+            <ToggleButtons
+              style={{
+                width: '120px',
+              }}
+            />
           </ToolbarGroup>
           <ToolbarGroup>
             <ToolbarSeparator />
