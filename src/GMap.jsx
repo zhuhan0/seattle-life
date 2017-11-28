@@ -12,6 +12,7 @@ const GMap = compose(
           position: 'absolute',
           height: '87%',
           width: '100%',
+          zIndex: -1,
         }}
       >
         <div style={{ height: '100%' }} />
