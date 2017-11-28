@@ -20,7 +20,7 @@ const BuyRentToggle = () => (
         backgroundColor: '#80deea',
       }}
     />
-    <p style={{ marginRight: 20 }}>RENT</p>
+    <p>RENT</p>
   </div>
 );
 

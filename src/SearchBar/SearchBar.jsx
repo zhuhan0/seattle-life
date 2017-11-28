@@ -18,12 +18,17 @@ class SearchBar extends React.Component {
         zDepth={2}
       >
         <Toolbar>
-          <ToolbarGroup>
+          <ToolbarGroup
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: 800,
+            }}
+          >
             <AutoComplete
               hintText="Type anywhere within Seattle (city, address, zipcode, etc.)"
               dataSource={this.state.dataSource}
               style={{
-                marginRight: 20,
                 width: 410,
               }}
               textFieldStyle={{
