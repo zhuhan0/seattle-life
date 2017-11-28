@@ -8,7 +8,20 @@ class SearchBar extends React.Component {
     super(props);
     this.state = {
       dataSource: [],
+      searchText: '',
     };
+  }
+
+  handleNewRequest = () => {
+    this.setState({
+      searchText: '',
+    });
+  }
+
+  handleUpdateInput = (searchText) => {
+    this.setState({
+      searchText,
+    });
   }
 
   render() {
@@ -28,6 +41,9 @@ class SearchBar extends React.Component {
             <AutoComplete
               hintText="Type anywhere within Seattle (city, address, zipcode, etc.)"
               dataSource={this.state.dataSource}
+              onNewRequest={this.handleNewRequest}
+              onUpdateInput={this.handleUpdateInput}
+              searchText={this.state.searchText}
               style={{
                 width: 410,
               }}
