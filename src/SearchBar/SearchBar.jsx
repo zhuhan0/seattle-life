@@ -9,6 +9,7 @@ class SearchBar extends React.Component {
     this.state = {
       dataSource: [],
       searchText: '',
+      toggled: false,
     };
   }
 
@@ -21,6 +22,12 @@ class SearchBar extends React.Component {
   handleUpdateInput = (searchText) => {
     this.setState({
       searchText,
+    });
+  }
+
+  handleToggle = () => {
+    this.setState({
+      toggled: !this.state.toggled,
     });
   }
 
@@ -51,7 +58,10 @@ class SearchBar extends React.Component {
                 width: 410,
               }}
             />
-            <BuyRentToggle />
+            <BuyRentToggle
+              onToggle={this.handleToggle}
+              toggled={this.state.toggled}
+            />
             <BedroomButtons />
           </ToolbarGroup>
           <ToolbarGroup>
