@@ -51,46 +51,52 @@ class SearchBar extends React.Component {
         zDepth={2}
       >
         <Toolbar>
-          <ToolbarGroup
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: 800,
-            }}
-          >
-            <AutoComplete
-              hintText="Type anywhere within Seattle (city, address, zipcode, etc.)"
-              dataSource={this.state.dataSource}
-              onNewRequest={this.handleNewRequest}
-              onUpdateInput={this.handleUpdateInput}
-              searchText={this.state.searchText}
-              style={{
-                width: 410,
-              }}
-              textFieldStyle={{
-                width: 410,
-              }}
-            />
-            <BuyRentToggle
-              onToggle={this.handleToggle}
-              toggled={this.state.toggled}
-            />
-            <BedroomButtons
-              bedrooms={this.state.bedrooms}
-              minusDisabled={this.state.bedrooms === 0}
-              onMinusClick={this.handleMinusClick}
-              onPlusClick={this.handlePlusClick}
-              plusDisabled={this.state.bedrooms === 5}
-            />
-          </ToolbarGroup>
           <ToolbarGroup>
-            <ToolbarSeparator />
-            <IconButton
-              iconClassName="fa fa-search"
+            <div
               style={{
-                marginLeft: 10,
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: 800,
               }}
-            />
+            >
+              <AutoComplete
+                hintText="Type anywhere within Seattle (city, address, zipcode, etc.)"
+                dataSource={this.state.dataSource}
+                onNewRequest={this.handleNewRequest}
+                onUpdateInput={this.handleUpdateInput}
+                searchText={this.state.searchText}
+                style={{
+                  width: 410,
+                }}
+                textFieldStyle={{
+                  width: 410,
+                }}
+              />
+              <BuyRentToggle
+                onToggle={this.handleToggle}
+                toggled={this.state.toggled}
+              />
+              <BedroomButtons
+                bedrooms={this.state.bedrooms}
+                minusDisabled={this.state.bedrooms === 0}
+                onMinusClick={this.handleMinusClick}
+                onPlusClick={this.handlePlusClick}
+                plusDisabled={this.state.bedrooms === 5}
+              />
+            </div>
+            <div
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                marginLeft: 30,
+              }}
+            >
+              <ToolbarSeparator />
+              <IconButton
+                iconClassName="fa fa-search"
+              />
+            </div>
           </ToolbarGroup>
         </Toolbar>
       </Paper>

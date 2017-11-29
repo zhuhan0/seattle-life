@@ -24,6 +24,7 @@
   "homepage": "https://github.com/zhuhan0/CIS550-Project#readme",
   "dependencies": {
     "material-ui": "^0.19.4",
+    "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-google-maps": "^9.2.2",
