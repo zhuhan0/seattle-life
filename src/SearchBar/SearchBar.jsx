@@ -7,6 +7,7 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      bedrooms: 0,
       dataSource: [],
       searchText: '',
       toggled: false,
@@ -28,6 +29,18 @@ class SearchBar extends React.Component {
   handleToggle = () => {
     this.setState({
       toggled: !this.state.toggled,
+    });
+  }
+
+  handlePlusClick = () => {
+    this.setState({
+      bedrooms: this.state.bedrooms + 1,
+    });
+  }
+
+  handleMinusClick = () => {
+    this.setState({
+      bedrooms: this.state.bedrooms - 1,
     });
   }
 
@@ -62,7 +75,13 @@ class SearchBar extends React.Component {
               onToggle={this.handleToggle}
               toggled={this.state.toggled}
             />
-            <BedroomButtons />
+            <BedroomButtons
+              bedrooms={this.state.bedrooms}
+              minusDisabled={this.state.bedrooms === 0}
+              onMinusClick={this.handleMinusClick}
+              onPlusClick={this.handlePlusClick}
+              plusDisabled={this.state.bedrooms === 5}
+            />
           </ToolbarGroup>
           <ToolbarGroup>
             <ToolbarSeparator />
