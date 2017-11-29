@@ -117,6 +117,7 @@ class SearchBar extends React.Component {
               <ToolbarSeparator />
               <IconButton
                 iconClassName="fa fa-search"
+                onClick={this.handleNewRequest}
               />
             </div>
           </ToolbarGroup>
