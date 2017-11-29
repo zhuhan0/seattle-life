@@ -28,8 +28,10 @@ class SearchBar extends React.Component {
         const { location } = response.json.results[0].geometry;
         const url = `http://seattle-life.herokuapp.com/${location.lat}/${location.lng}/${this.state.bedrooms}/${this.state.toggled}`;
         const init = {
+          cache: 'default',
           headers: new Headers(),
-          mode: 'cors',
+          method: 'GET',
+          mode: 'no-cors',
         };
         fetch(url, init).then((res) => {
           console.log(res);
