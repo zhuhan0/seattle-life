@@ -1,9 +1,9 @@
 import React from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchData } from '../actions/index';
 import { AutoComplete, IconButton, Paper, Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui';
+import { fetchData } from '../actions/index';
 import BuyRentToggle from './BuyRentToggle';
 import BedroomButtons from './BedroomButtons';
 
@@ -29,7 +29,6 @@ class SearchBar extends React.Component {
       if (!err) {
         const { location } = response.json.results[0].geometry;
         this.props.fetchData(location.lat, location.lng, this.state.bedrooms, this.state.toggled);
-
       }
     });
   }
@@ -119,8 +118,12 @@ class SearchBar extends React.Component {
   }
 }
 
+SearchBar.propTypes = {
+  fetchData: PropTypes.func.isRequired,
+};
+
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ fetchData }, dispatch);
+  return bindActionCreators({ fetchData }, dispatch);
 }
 
 export default connect(null, mapDispatchToProps)(SearchBar);

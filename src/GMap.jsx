@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { GoogleMap, withGoogleMap, withScriptjs, Marker } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
-const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
+
+const { MarkerClusterer } = require('react-google-maps/lib/components/addons/MarkerClusterer');
 
 const GMap = compose(
   withProps({
@@ -30,18 +31,18 @@ const GMap = compose(
     center={props.center}
 
   >
-  <MarkerClusterer
+    <MarkerClusterer
       averageCenter
       enableRetinaIcons
       gridSize={60}
     >
-  {props.markers.map(marker => (
+      {props.markers.map(marker => (
         <Marker
           key={marker.id}
           position={{ lat: marker.lat, lng: marker.lng }}
         />
-  ))}
-  </MarkerClusterer>
+      ))}
+    </MarkerClusterer>
   </GoogleMap>
 ));
 
@@ -49,11 +50,11 @@ class MapComponent extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-     markers: [],
-     center: {
-      lat: 47.608013,
-      lng: -122.335167
-    }
+      markers: [],
+      center: {
+        lat: 47.608013,
+        lng: -122.335167,
+      },
     };
   }
   componentDidUpdate() {
@@ -66,14 +67,14 @@ class MapComponent extends React.PureComponent {
     return (
       <GMap
         markers={this.state.markers}
-        center={this.state.center} />
-      );
+        center={this.state.center}
+      />
+    );
   }
-
 }
 
 function mapStateToProps({ searchResults }) {
-    return { searchResults };
+  return { searchResults };
 }
 
 export default connect(mapStateToProps)(MapComponent);
