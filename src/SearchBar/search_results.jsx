@@ -49,6 +49,7 @@ class SearchResults extends Component {
       >
         <List>
           <Subheader>Result</Subheader>
+          <Divider />
           <ListItem
             leftIcon={<ActionHome color={cyan400} />}
             primaryText={`${this.showHouses()} Houses`}
