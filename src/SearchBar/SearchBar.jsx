@@ -32,10 +32,6 @@ class SearchBar extends React.Component {
         });
       }
     });
-
-    this.setState({
-      searchText: '',
-    });
   }
 
   handleUpdateInput = (searchText) => {
