@@ -1,14 +1,22 @@
 /* global document */
 
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import ReduxPromise from 'redux-promise';
+import reducers from './reducers';
 import { AppBar, IconButton, MuiThemeProvider } from 'material-ui';
 import SearchBar from './SearchBar/SearchBar';
-import GMap from './GMap';
+import SearchResults from './SearchBar/search_results';
+import MapComponent from './GMap';
 
-const App = () => (
-  <MuiThemeProvider>
+const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+
+class App extends Component {
+  render() {
+    return (
+      <MuiThemeProvider>
     <div>
       <AppBar
         iconElementRight={
@@ -21,12 +29,17 @@ const App = () => (
         showMenuIconButton={false}
       />
       <SearchBar />
-      <GMap />
+      <SearchResults />
+      <MapComponent />
     </div>
   </MuiThemeProvider>
-);
+      );
+  }
+}
 
 ReactDOM.render(
-  <App />,
+  <Provider store={createStoreWithMiddleware(reducers)}>
+  <App />
+  </Provider>,
   document.getElementById('app'),
 );
