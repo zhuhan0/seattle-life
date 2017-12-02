@@ -1,5 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchData } from '../actions/index';
 import { AutoComplete, IconButton, Paper, Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui';
 import BuyRentToggle from './BuyRentToggle';
 import BedroomButtons from './BedroomButtons';
@@ -25,11 +28,8 @@ class SearchBar extends React.Component {
     }, (err, response) => {
       if (!err) {
         const { location } = response.json.results[0].geometry;
-        const url = `http://seattle-life.herokuapp.com/${location.lat}/${location.lng}/${this.state.bedrooms}/${this.state.toggled}`;
-        console.log(url);
-        axios.get(url).then((res) => {
-          console.log(res);
-        });
+        this.props.fetchData(location.lat, location.lng, this.state.bedrooms, this.state.toggled);
+
       }
     });
 
@@ -123,4 +123,8 @@ class SearchBar extends React.Component {
   }
 }
 
-export default SearchBar;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ fetchData }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(SearchBar);
