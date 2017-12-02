@@ -14,7 +14,8 @@ const GMap = compose(
         style={{
           position: 'absolute',
           height: '87%',
-          width: '100%',
+          right: 0,
+          width: '80%',
           zIndex: -1,
         }}
       >
@@ -57,6 +58,7 @@ class MapComponent extends React.PureComponent {
       },
     };
   }
+
   componentDidUpdate() {
     if (this.props.searchResults) {
       this.setState({ markers: this.props.searchResults.houses });

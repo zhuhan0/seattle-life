@@ -2,16 +2,18 @@
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import logger from 'redux-logger';
+import ReduxPromise from 'redux-promise';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { AppBar, IconButton, MuiThemeProvider } from 'material-ui';
-import ReduxPromise from 'redux-promise';
+
 import reducers from './reducers';
 import SearchBar from './SearchBar/SearchBar';
 import SearchResults from './SearchBar/search_results';
 import MapComponent from './GMap';
 
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+const createStoreWithMiddleware = applyMiddleware(logger, ReduxPromise)(createStore);
 
 class App extends Component {
   render() {
@@ -29,8 +31,10 @@ class App extends Component {
             showMenuIconButton={false}
           />
           <SearchBar />
-          <SearchResults />
-          <MapComponent />
+          <div style={{ display: 'flex' }}>
+            <SearchResults />
+            <MapComponent />
+          </div>
         </div>
       </MuiThemeProvider>
     );
