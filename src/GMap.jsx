@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { GoogleMap, withGoogleMap, withScriptjs, Marker } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
@@ -74,6 +75,13 @@ class MapComponent extends React.PureComponent {
     );
   }
 }
+
+MapComponent.propTypes = {
+  searchResults: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.shape,
+  ]).isRequired,
+};
 
 function mapStateToProps({ searchResults }) {
   return { searchResults };

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Divider, List, ListItem, Paper, Subheader } from 'material-ui';
 import { amber400, cyan400, darkBlack, green400 } from 'material-ui/styles/colors';
@@ -75,6 +76,13 @@ class SearchResults extends Component {
     );
   }
 }
+
+SearchResults.propTypes = {
+  searchResults: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.shape,
+  ]).isRequired,
+};
 
 function mapStateToProps({ searchResults }) {
   return { searchResults };
