@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Divider, List, ListItem, Paper, Subheader } from 'material-ui';
 import { amber400, cyan400, darkBlack, green400 } from 'material-ui/styles/colors';
@@ -55,8 +56,14 @@ class SearchResults extends Component {
           <Divider />
           <ListItem
             leftIcon={<ActionHome color={cyan400} />}
+            nestedItems={_.map(this.props.searchResults.houses, house => (
+              <ListItem
+                primaryText={`${house.city}, ${house.postcode}`}
+              />
+            ))}
             onClick={() => this.props.onCategoryClick(0)}
             primaryText={houses === 1 ? `${houses} House` : `${houses} Houses`}
+            primaryTogglesNestedList
           />
           <Divider />
           <ListItem
