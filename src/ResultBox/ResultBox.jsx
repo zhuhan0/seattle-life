@@ -6,38 +6,14 @@ class ResultBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      markerType: 'house',
+      markerType: 0,
     };
   }
 
-  handleHouseClick = () => {
-    if (this.state.markerType !== 'house') {
+  handleCategoryClick = (index) => {
+    if (this.state.markerType !== index) {
       this.setState({
-        markerType: 'house',
-      });
-    }
-  }
-
-  handleRestaurantClick = () => {
-    if (this.state.markerType !== 'restaurant') {
-      this.setState({
-        markerType: 'restaurant',
-      });
-    }
-  }
-
-  handleUtilityClick = () => {
-    if (this.state.markerType !== 'utility') {
-      this.setState({
-        markerType: 'utility',
-      });
-    }
-  }
-
-  handleCrimeClick = () => {
-    if (this.state.markerType !== 'crime') {
-      this.setState({
-        markerType: 'crime',
+        markerType: index,
       });
     }
   }
@@ -46,10 +22,7 @@ class ResultBox extends React.Component {
     return (
       <div style={{ display: 'flex' }}>
         <SearchResults
-          onHouseClick={this.handleHouseClick}
-          onRestaurantClick={this.handleRestaurantClick}
-          onUtilityClick={this.handleUtilityClick}
-          onCrimeClick={this.handleCrimeClick}
+          onCategoryClick={this.handleCategoryClick}
         />
         <MapComponent markerType={this.state.markerType} />
       </div>
