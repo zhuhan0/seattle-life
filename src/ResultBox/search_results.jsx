@@ -38,6 +38,8 @@ class SearchResults extends Component {
   }
 
   render() {
+    const houses = this.showHouses();
+
     return (
       <Paper
         style={{
@@ -53,21 +55,25 @@ class SearchResults extends Component {
           <Divider />
           <ListItem
             leftIcon={<ActionHome color={cyan400} />}
-            primaryText={`${this.showHouses()} Houses`}
+            onClick={this.props.onHouseClick}
+            primaryText={houses === 1 ? `${houses} House` : `${houses} Houses`}
           />
           <Divider />
           <ListItem
             leftIcon={<MapsRestaurant color={amber400} />}
+            onClick={this.props.onRestaurantClick}
             primaryText={`${this.showRestaurants()} Restaurants`}
           />
           <Divider />
           <ListItem
             leftIcon={<NotificationPower color={green400} />}
+            onClick={this.props.onUtilityClick}
             primaryText={`${this.showUtilities()} Utilities`}
           />
           <Divider />
           <ListItem
             leftIcon={<ActionReportProblem color={darkBlack} />}
+            onClick={this.props.onCrimeClick}
             primaryText={`${this.showCrimes()} Crimes`}
           />
           <Divider />
@@ -78,6 +84,10 @@ class SearchResults extends Component {
 }
 
 SearchResults.propTypes = {
+  onHouseClick: PropTypes.func.isRequired,
+  onRestaurantClick: PropTypes.func.isRequired,
+  onUtilityClick: PropTypes.func.isRequired,
+  onCrimeClick: PropTypes.func.isRequired,
   searchResults: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.shape,

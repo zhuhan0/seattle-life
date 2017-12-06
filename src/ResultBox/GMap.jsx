@@ -37,7 +37,7 @@ const GMap = compose(
       enableRetinaIcons
       gridSize={60}
     >
-      {props.markers.map(marker => (
+      {(props.markers || []).map(marker => (
         <Marker
           key={marker.id}
           position={{ lat: marker.lat, lng: marker.lng }}
@@ -60,8 +60,25 @@ class MapComponent extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.searchResults) {
+    if (this.props.searchResults !== nextProps.searchResults) {
       this.setState({ markers: nextProps.searchResults.houses });
+    } else if (this.props.markerType !== nextProps.markerType) {
+      switch (nextProps.markerType) {
+        case 'house':
+          this.setState({ markers: nextProps.searchResults.houses });
+          break;
+        case 'restaurant':
+          this.setState({ markers: nextProps.searchResults.restaurants });
+          break;
+        case 'utility':
+          this.setState({ markers: nextProps.searchResults.utilities });
+          break;
+        case 'crime':
+          this.setState({ markers: nextProps.searchResults.crimes });
+          break;
+        default:
+          this.setState({ markers: [] });
+      }
     }
   }
 
@@ -75,7 +92,12 @@ class MapComponent extends React.PureComponent {
   }
 }
 
+MapComponent.defaultProps = {
+  markerType: 'house',
+};
+
 MapComponent.propTypes = {
+  markerType: PropTypes.string,
   searchResults: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.shape,

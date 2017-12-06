@@ -9,9 +9,8 @@ import { createStore, applyMiddleware } from 'redux';
 import { AppBar, IconButton, MuiThemeProvider } from 'material-ui';
 
 import reducers from './reducers';
+import ResultBox from './ResultBox/ResultBox';
 import SearchBar from './SearchBar/SearchBar';
-import SearchResults from './search_results';
-import MapComponent from './GMap';
 
 const createStoreWithMiddleware = applyMiddleware(logger, ReduxPromise)(createStore);
 
@@ -31,10 +30,7 @@ class App extends Component {
             showMenuIconButton={false}
           />
           <SearchBar />
-          <div style={{ display: 'flex' }}>
-            <SearchResults />
-            <MapComponent />
-          </div>
+          <ResultBox />
         </div>
       </MuiThemeProvider>
     );
