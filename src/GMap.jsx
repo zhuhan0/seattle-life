@@ -31,7 +31,6 @@ const GMap = compose(
   <GoogleMap
     defaultZoom={12}
     center={props.center}
-
   >
     <MarkerClusterer
       averageCenter
@@ -60,9 +59,9 @@ class MapComponent extends React.PureComponent {
     };
   }
 
-  componentDidUpdate() {
-    if (this.props.searchResults) {
-      this.setState({ markers: this.props.searchResults.houses });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.searchResults) {
+      this.setState({ markers: nextProps.searchResults.houses });
     }
   }
 

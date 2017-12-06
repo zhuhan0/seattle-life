@@ -10,7 +10,7 @@ import { AppBar, IconButton, MuiThemeProvider } from 'material-ui';
 
 import reducers from './reducers';
 import SearchBar from './SearchBar/SearchBar';
-import SearchResults from './SearchBar/search_results';
+import SearchResults from './search_results';
 import MapComponent from './GMap';
 
 const createStoreWithMiddleware = applyMiddleware(logger, ReduxPromise)(createStore);
