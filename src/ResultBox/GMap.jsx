@@ -30,7 +30,7 @@ const GMap = compose(
   withGoogleMap,
 )(props => (
   <GoogleMap
-    defaultZoom={12}
+    defaultZoom={13}
     center={props.center}
   >
     <MarkerClusterer
@@ -72,6 +72,13 @@ class MapComponent extends React.PureComponent {
       } else {
         const first = nextProps.markerType[0];
         const second = nextProps.markerType[1];
+        const place = this.props.searchResults[categories[first]][second];
+        this.setState({
+          center: {
+            lat: place.lat,
+            lng: place.lng,
+          },
+        });
       }
     }
   }
