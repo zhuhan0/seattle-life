@@ -57,6 +57,7 @@ const findHouses = (lat, lng, floorplan, isRent) => {
 		}
 		else{
 			resolve(response)
+			con.end()
 		}
 		})
 	})
@@ -85,6 +86,7 @@ const findUtilities = (lat, lng) => {
 		}
 		else{
 			resolve(response)
+			con.end()
 		}
 		})
 	})
@@ -114,6 +116,7 @@ const findCrimes = (lat, lng) => {
 		}
 		else{
 			resolve(response)
+			con.end()
 		}
 		})
 	})
