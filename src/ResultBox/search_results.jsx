@@ -39,17 +39,37 @@ class SearchResults extends Component {
   }
 
   render() {
-    const houses = this.showHouses();
-    // const groupedRestaurants1 = _.groupBy(uniqRestaurants, restaurant => restaurant.category[0].title);
-    // const groupedRestaurants2 = _.groupBy(uniqRestaurants, restaurant => (restaurant.category[1] || restaurant.category[0]).title);
-    // const groupedRestaurants3 = _.groupBy(uniqRestaurants, restaurant => (restaurant.category[2] || restaurant.category[0]).title);
-    // const mergedRestaurants = _.merge(groupedRestaurants1, groupedRestaurants2, groupedRestaurants3, (objValue, srcValue) => objValue.concat(srcValue));
+    const numHouses = this.showHouses();
+
+    const { restaurants } = this.props.searchResults;
+    const groupedRestaurants1 = _.groupBy(
+      restaurants,
+      restaurant => restaurant.category[0].title,
+    );
+    const groupedRestaurants2 = _.groupBy(
+      restaurants,
+      restaurant => (restaurant.category[1] || restaurant.category[0]).title,
+    );
+    const groupedRestaurants3 = _.groupBy(
+      restaurants,
+      restaurant => (restaurant.category[2] || restaurant.category[0]).title,
+    );
+    const mergedRestaurants = _.merge(
+      groupedRestaurants1,
+      groupedRestaurants2,
+      groupedRestaurants3,
+    );
+    _.forEach(mergedRestaurants, (value, key) => {
+      const unique = _.uniqBy(value, '_id');
+      mergedRestaurants[key] = unique;
+    });
 
     return (
       <Paper
         style={{
           fontSize: 18,
           height: '87%',
+          overflow: 'scroll',
           position: 'absolute',
           width: '20%',
         }}
@@ -68,11 +88,17 @@ class SearchResults extends Component {
               />
             ))}
             onClick={() => this.props.onClick([0, -1])}
-            primaryText={houses === 1 ? `${houses} House` : `${houses} Houses`}
+            primaryText={numHouses === 1 ? `${numHouses} House` : `${numHouses} Houses`}
           />
           <Divider />
           <ListItem
             leftIcon={<MapsRestaurant color={amber400} />}
+            nestedItems={_.map(_.keys(mergedRestaurants), (category, index) => (
+              <ListItem
+                key={index}
+                primaryText={category}
+              />
+            ))}
             onClick={() => this.props.onClick([1, -1])}
             primaryText={`${this.showRestaurants()} Restaurants`}
           />
