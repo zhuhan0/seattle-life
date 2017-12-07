@@ -59,13 +59,12 @@ class SearchResults extends Component {
             nestedItems={_.map(this.props.searchResults.houses, (house, index) => (
               <ListItem
                 key={index}
-                onClick={() => this.props.onClick([0, index])}
+                onClick={() => this.props.onClick([0, house.id])}
                 primaryText={`${house.city}, ${house.postcode}`}
               />
             ))}
             onClick={() => this.props.onClick([0, -1])}
             primaryText={houses === 1 ? `${houses} House` : `${houses} Houses`}
-            primaryTogglesNestedList
           />
           <Divider />
           <ListItem
