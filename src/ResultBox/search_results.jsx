@@ -40,6 +40,10 @@ class SearchResults extends Component {
 
   render() {
     const houses = this.showHouses();
+    // const groupedRestaurants1 = _.groupBy(uniqRestaurants, restaurant => restaurant.category[0].title);
+    // const groupedRestaurants2 = _.groupBy(uniqRestaurants, restaurant => (restaurant.category[1] || restaurant.category[0]).title);
+    // const groupedRestaurants3 = _.groupBy(uniqRestaurants, restaurant => (restaurant.category[2] || restaurant.category[0]).title);
+    // const mergedRestaurants = _.merge(groupedRestaurants1, groupedRestaurants2, groupedRestaurants3, (objValue, srcValue) => objValue.concat(srcValue));
 
     return (
       <Paper
