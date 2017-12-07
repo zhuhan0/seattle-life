@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Divider, List, ListItem, Paper, Subheader } from 'material-ui';
 import { amber400, cyan400, darkBlack, green400 } from 'material-ui/styles/colors';
@@ -55,25 +56,31 @@ class SearchResults extends Component {
           <Divider />
           <ListItem
             leftIcon={<ActionHome color={cyan400} />}
-            onClick={this.props.onHouseClick}
+            nestedItems={_.map(this.props.searchResults.houses, house => (
+              <ListItem
+                primaryText={`${house.city}, ${house.postcode}`}
+              />
+            ))}
+            onClick={() => this.props.onCategoryClick(0)}
             primaryText={houses === 1 ? `${houses} House` : `${houses} Houses`}
+            primaryTogglesNestedList
           />
           <Divider />
           <ListItem
             leftIcon={<MapsRestaurant color={amber400} />}
-            onClick={this.props.onRestaurantClick}
+            onClick={() => this.props.onCategoryClick(1)}
             primaryText={`${this.showRestaurants()} Restaurants`}
           />
           <Divider />
           <ListItem
             leftIcon={<NotificationPower color={green400} />}
-            onClick={this.props.onUtilityClick}
+            onClick={() => this.props.onCategoryClick(2)}
             primaryText={`${this.showUtilities()} Utilities`}
           />
           <Divider />
           <ListItem
             leftIcon={<ActionReportProblem color={darkBlack} />}
-            onClick={this.props.onCrimeClick}
+            onClick={() => this.props.onCategoryClick(3)}
             primaryText={`${this.showCrimes()} Crimes`}
           />
           <Divider />
@@ -84,10 +91,7 @@ class SearchResults extends Component {
 }
 
 SearchResults.propTypes = {
-  onHouseClick: PropTypes.func.isRequired,
-  onRestaurantClick: PropTypes.func.isRequired,
-  onUtilityClick: PropTypes.func.isRequired,
-  onCrimeClick: PropTypes.func.isRequired,
+  onCategoryClick: PropTypes.func.isRequired,
   searchResults: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.shape,

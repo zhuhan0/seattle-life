@@ -47,6 +47,8 @@ const GMap = compose(
   </GoogleMap>
 ));
 
+const categories = ['houses', 'restaurants', 'utilities', 'crimes'];
+
 class MapComponent extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -63,22 +65,8 @@ class MapComponent extends React.PureComponent {
     if (this.props.searchResults !== nextProps.searchResults) {
       this.setState({ markers: nextProps.searchResults.houses });
     } else if (this.props.markerType !== nextProps.markerType) {
-      switch (nextProps.markerType) {
-        case 'house':
-          this.setState({ markers: nextProps.searchResults.houses });
-          break;
-        case 'restaurant':
-          this.setState({ markers: nextProps.searchResults.restaurants });
-          break;
-        case 'utility':
-          this.setState({ markers: nextProps.searchResults.utilities });
-          break;
-        case 'crime':
-          this.setState({ markers: nextProps.searchResults.crimes });
-          break;
-        default:
-          this.setState({ markers: [] });
-      }
+      const index = nextProps.markerType;
+      this.setState({ markers: nextProps.searchResults[categories[index]] });
     }
   }
 
@@ -93,11 +81,11 @@ class MapComponent extends React.PureComponent {
 }
 
 MapComponent.defaultProps = {
-  markerType: 'house',
+  markerType: 0,
 };
 
 MapComponent.propTypes = {
-  markerType: PropTypes.string,
+  markerType: PropTypes.number,
   searchResults: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.shape,
