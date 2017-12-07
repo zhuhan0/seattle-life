@@ -23,6 +23,10 @@ class SearchBar extends React.Component {
   }
 
   handleNewRequest = () => {
+    if (this.state.searchText.length === 0) {
+      return;
+    }
+
     googleMapsClient.geocode({
       address: this.state.searchText,
     }, (err, response) => {

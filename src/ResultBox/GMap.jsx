@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { GoogleMap, withGoogleMap, withScriptjs, Marker } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
@@ -37,9 +38,9 @@ const GMap = compose(
       enableRetinaIcons
       gridSize={60}
     >
-      {(props.markers || []).map(marker => (
+      {_.map((props.markers || []), (marker, index) => (
         <Marker
-          key={marker.id}
+          key={index}
           position={{ lat: marker.lat, lng: marker.lng }}
         />
       ))}
@@ -65,8 +66,13 @@ class MapComponent extends React.PureComponent {
     if (this.props.searchResults !== nextProps.searchResults) {
       this.setState({ markers: nextProps.searchResults.houses });
     } else if (this.props.markerType !== nextProps.markerType) {
-      const index = nextProps.markerType;
-      this.setState({ markers: nextProps.searchResults[categories[index]] });
+      if (!Array.isArray(nextProps.markerType)) {
+        const index = nextProps.markerType;
+        this.setState({ markers: this.props.searchResults[categories[index]] });
+      } else {
+        const first = nextProps.markerType[0];
+        const second = nextProps.markerType[1];
+      }
     }
   }
 
@@ -85,7 +91,10 @@ MapComponent.defaultProps = {
 };
 
 MapComponent.propTypes = {
-  markerType: PropTypes.number,
+  markerType: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.number,
+  ]),
   searchResults: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.shape,

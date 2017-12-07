@@ -56,31 +56,33 @@ class SearchResults extends Component {
           <Divider />
           <ListItem
             leftIcon={<ActionHome color={cyan400} />}
-            nestedItems={_.map(this.props.searchResults.houses, house => (
+            nestedItems={_.map(this.props.searchResults.houses, (house, index) => (
               <ListItem
+                key={index}
+                onClick={() => this.props.onClick([0, index])}
                 primaryText={`${house.city}, ${house.postcode}`}
               />
             ))}
-            onClick={() => this.props.onCategoryClick(0)}
+            onClick={() => this.props.onClick(0)}
             primaryText={houses === 1 ? `${houses} House` : `${houses} Houses`}
             primaryTogglesNestedList
           />
           <Divider />
           <ListItem
             leftIcon={<MapsRestaurant color={amber400} />}
-            onClick={() => this.props.onCategoryClick(1)}
+            onClick={() => this.props.onClick(1)}
             primaryText={`${this.showRestaurants()} Restaurants`}
           />
           <Divider />
           <ListItem
             leftIcon={<NotificationPower color={green400} />}
-            onClick={() => this.props.onCategoryClick(2)}
+            onClick={() => this.props.onClick(2)}
             primaryText={`${this.showUtilities()} Utilities`}
           />
           <Divider />
           <ListItem
             leftIcon={<ActionReportProblem color={darkBlack} />}
-            onClick={() => this.props.onCategoryClick(3)}
+            onClick={() => this.props.onClick(3)}
             primaryText={`${this.showCrimes()} Crimes`}
           />
           <Divider />
@@ -91,7 +93,7 @@ class SearchResults extends Component {
 }
 
 SearchResults.propTypes = {
-  onCategoryClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   searchResults: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.shape,

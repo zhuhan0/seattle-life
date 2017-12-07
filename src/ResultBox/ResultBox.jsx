@@ -10,7 +10,7 @@ class ResultBox extends React.Component {
     };
   }
 
-  handleCategoryClick = (index) => {
+  handleClick = (index) => {
     if (this.state.markerType !== index) {
       this.setState({
         markerType: index,
@@ -21,9 +21,7 @@ class ResultBox extends React.Component {
   render() {
     return (
       <div style={{ display: 'flex' }}>
-        <SearchResults
-          onCategoryClick={this.handleCategoryClick}
-        />
+        <SearchResults onClick={this.handleClick} />
         <MapComponent markerType={this.state.markerType} />
       </div>
     );
