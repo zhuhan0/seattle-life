@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { GoogleMap, withGoogleMap, withScriptjs, Marker } from 'react-google-maps';
+import { GoogleMap, InfoWindow, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
 
 const { MarkerClusterer } = require('react-google-maps/lib/components/addons/MarkerClusterer');
@@ -42,7 +42,9 @@ const GMap = compose(
         <Marker
           key={index}
           position={{ lat: marker.lat, lng: marker.lng }}
-        />
+        >
+          {props.isInfoWindowOpen[index] && <InfoWindow>{props.infoWindow}</InfoWindow>}
+        </Marker>
       ))}
     </MarkerClusterer>
   </GoogleMap>
@@ -54,30 +56,48 @@ class MapComponent extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      markers: [],
       center: {
         lat: 47.608013,
         lng: -122.335167,
       },
+      isInfoWindowOpen: [],
+      markers: [],
+      place: {},
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.searchResults !== nextProps.searchResults) {
-      this.setState({ markers: nextProps.searchResults.houses });
-    } else if (this.props.markerType !== nextProps.markerType) {
-      if (!Array.isArray(nextProps.markerType)) {
-        const index = nextProps.markerType;
-        this.setState({ markers: this.props.searchResults[categories[index]] });
-      } else {
-        const first = nextProps.markerType[0];
-        const second = nextProps.markerType[1];
-        const place = this.props.searchResults[categories[first]][second];
+      this.setState({
+        isInfoWindowOpen: new Array(nextProps.searchResults.houses.length).fill(false),
+        markers: nextProps.searchResults.houses,
+      });
+    } else {
+      const index = nextProps.markerType[0];
+      const places = this.props.searchResults[categories[index]];
+      this.setState({
+        isInfoWindowOpen: new Array(places.length).fill(false),
+        markers: places,
+      });
+      if (nextProps.markerType[1] !== -1) {
+        const oldSecond = this.props.markerType[1];
+        const newFirst = nextProps.markerType[0];
+        const newSecond = nextProps.markerType[1];
+
+        const newPlace = this.props.searchResults[categories[newFirst]][newSecond];
+        const { isInfoWindowOpen } = this.state;
+        if (oldSecond !== -1) {
+          isInfoWindowOpen[oldSecond] = false;
+        }
+        isInfoWindowOpen[newSecond] = true;
+
         this.setState({
           center: {
-            lat: place.lat,
-            lng: place.lng,
+            lat: newPlace.lat,
+            lng: newPlace.lng,
           },
+          isInfoWindowOpen,
+          place: newPlace,
         });
       }
     }
@@ -88,6 +108,8 @@ class MapComponent extends React.PureComponent {
       <GMap
         markers={this.state.markers}
         center={this.state.center}
+        infoWindow={<p>${this.state.place['2017-09']}</p>}
+        isInfoWindowOpen={this.state.isInfoWindowOpen}
       />
     );
   }

@@ -63,26 +63,26 @@ class SearchResults extends Component {
                 primaryText={`${house.city}, ${house.postcode}`}
               />
             ))}
-            onClick={() => this.props.onClick(0)}
+            onClick={() => this.props.onClick([0, -1])}
             primaryText={houses === 1 ? `${houses} House` : `${houses} Houses`}
             primaryTogglesNestedList
           />
           <Divider />
           <ListItem
             leftIcon={<MapsRestaurant color={amber400} />}
-            onClick={() => this.props.onClick(1)}
+            onClick={() => this.props.onClick([1, -1])}
             primaryText={`${this.showRestaurants()} Restaurants`}
           />
           <Divider />
           <ListItem
             leftIcon={<NotificationPower color={green400} />}
-            onClick={() => this.props.onClick(2)}
+            onClick={() => this.props.onClick([2, -1])}
             primaryText={`${this.showUtilities()} Utilities`}
           />
           <Divider />
           <ListItem
             leftIcon={<ActionReportProblem color={darkBlack} />}
-            onClick={() => this.props.onClick(3)}
+            onClick={() => this.props.onClick([3, -1])}
             primaryText={`${this.showCrimes()} Crimes`}
           />
           <Divider />
