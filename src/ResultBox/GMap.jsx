@@ -109,7 +109,6 @@ class MapComponent extends React.PureComponent {
   }
 
   render() {
-    console.log(this.state.markers);
     return (
       <GMap
         markers={this.state.markers}

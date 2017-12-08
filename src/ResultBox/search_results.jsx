@@ -44,28 +44,16 @@ class SearchResults extends Component {
     const numHouses = this.showHouses();
 
     const { restaurants } = this.props.searchResults;
-    const groupedRestaurants1 = _.groupBy(
-      restaurants,
-      restaurant => restaurant.category[0].title,
-    );
-    const groupedRestaurants2 = _.groupBy(
-      restaurants,
-      restaurant => (restaurant.category[1] || restaurant.category[0]).title,
-    );
-    const groupedRestaurants3 = _.groupBy(
-      restaurants,
-      restaurant => (restaurant.category[2] || restaurant.category[0]).title,
-    );
-    const mergedRestaurants = _.merge(
-      groupedRestaurants1,
-      groupedRestaurants2,
-      groupedRestaurants3,
-    );
-    _.forEach(mergedRestaurants, (value, key) => {
-      const unique = _.uniqBy(value, '_id');
-      mergedRestaurants[key] = unique;
+    const groups = {};
+    _.forEach(restaurants, (restaurant) => {
+      _.forEach(restaurant.category, (category) => {
+        if (_.includes(_.keys(groups), category.title)) {
+          groups[category.title].push(restaurant);
+        } else {
+          groups[category.title] = [restaurant];
+        }
+      });
     });
-    // console.log(mergedRestaurants);
 
     return (
       <Paper
@@ -96,16 +84,19 @@ class SearchResults extends Component {
           <Divider />
           <ListItem
             leftIcon={<MapsRestaurant color={amber400} />}
-            nestedItems={_.map(_.sortBy(_.keys(mergedRestaurants)), (category, index) => (
+            nestedItems={_.map(_.sortBy(_.keys(groups)), (category, index) => (
               <ListItem
                 key={index}
-                nestedItems={_.map(_.sortBy(mergedRestaurants[category]), (restaurant, ind) => (
-                  <ListItem
-                    key={ind}
-                    onClick={() => this.props.onClick([1, restaurant._id])}
-                    primaryText={<span><b>{restaurant.name}</b>, {restaurant.address}</span>}
-                  />
-                ))}
+                nestedItems={_.map(
+                  _.sortBy(groups[category], restaurant => _.lowerCase(restaurant.name)),
+                  (restaurant, ind) => (
+                    <ListItem
+                      key={ind}
+                      onClick={() => this.props.onClick([1, restaurant._id])}
+                      primaryText={<span><b>{restaurant.name}</b>, {restaurant.address}</span>}
+                    />
+                  ),
+                )}
                 primaryText={category}
               />
             ))}
