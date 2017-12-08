@@ -45,10 +45,11 @@ const GMap = compose(
       {_.map((props.markers || []), marker => (
         <Marker
           key={marker.id || marker._id}
+          onClick={() => props.onMarkerClick(marker.id || marker._id)}
           position={{ lat: marker.lat, lng: marker.lng }}
         >
           {props.infoWindowOpen.includes(marker.id || marker._id) &&
-            <InfoWindow>{props.infoWindow}</InfoWindow>}
+            <InfoWindow>{props.infoWindow[marker.id || marker._id]}</InfoWindow>}
         </Marker>
       ))}
     </MarkerClusterer>
@@ -57,7 +58,7 @@ const GMap = compose(
 
 const categories = ['houses', 'restaurants', 'utilities', 'crimes'];
 
-class MapComponent extends React.PureComponent {
+class MapComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,7 +68,6 @@ class MapComponent extends React.PureComponent {
       },
       infoWindowOpen: [],
       markers: [],
-      place: {},
     };
   }
 
@@ -79,7 +79,7 @@ class MapComponent extends React.PureComponent {
       });
     } else {
       const index = nextProps.markerType[0];
-      const places = this.props.searchResults[categories[index]];
+      const category = this.props.searchResults[categories[index]];
       const infoWindowOpen = [];
 
       if (nextProps.markerType[1] !== -1) {
@@ -98,16 +98,27 @@ class MapComponent extends React.PureComponent {
             lng: newPlace.lng,
           },
           infoWindowOpen,
-          markers: places,
-          place: newPlace,
+          markers: category,
         });
       } else {
         this.setState({
           infoWindowOpen,
-          markers: places,
+          markers: category,
         });
       }
     }
+  }
+
+  handleMarkerClick = (id) => {
+    const { infoWindowOpen } = this.state;
+    if (_.includes(infoWindowOpen, id)) {
+      _.remove(infoWindowOpen, n => n === id);
+    } else {
+      infoWindowOpen.push(id);
+    }
+    this.setState({
+      infoWindowOpen,
+    });
   }
 
   renderStars = (number) => {
@@ -135,18 +146,22 @@ class MapComponent extends React.PureComponent {
   }
 
   render() {
-    let infoWindow = '';
+    const infoWindow = {};
     const category = this.props.markerType[0];
     if (category === 0) {
-      infoWindow = <span>${this.state.place['2017-09']}</span>;
+      _.forEach(this.state.markers, (place) => {
+        infoWindow[place.id] = <span>${place['2017-09']}</span>;
+      });
     } else if (category === 1) {
-      infoWindow = (
-        <div style={{ overflow: 'hidden' }}>
-          {this.state.place.name}<br />
-          {this.state.place.address}<br />
-          {this.renderStars(this.state.place.star)}
-        </div>
-      );
+      _.forEach(this.state.markers, (place) => {
+        infoWindow[place._id] = (
+          <div style={{ overflow: 'hidden' }}>
+            {place.name}<br />
+            {place.address}<br />
+            {this.renderStars(place.star)}
+          </div>
+        );
+      });
     }
 
     return (
@@ -155,6 +170,7 @@ class MapComponent extends React.PureComponent {
         center={this.state.center}
         infoWindow={infoWindow}
         infoWindowOpen={this.state.infoWindowOpen}
+        onMarkerClick={this.handleMarkerClick}
       />
     );
   }
