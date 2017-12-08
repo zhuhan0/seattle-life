@@ -3,6 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { IconButton } from 'material-ui';
+import { cyan400 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
 import { GoogleMap, InfoWindow, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
@@ -108,12 +110,58 @@ class MapComponent extends React.PureComponent {
     }
   }
 
+  renderStars = (number) => {
+    let stars = [];
+    let i = 0;
+
+    for (i = 0; i < number; i += 1) {
+      stars.push(<IconButton
+        iconClassName="fa fa-star"
+        iconStyle={{
+          color: cyan400,
+        }}
+        key={i}
+        style={{
+          margin: -10,
+        }}
+      />);
+    }
+    if (number % 1 !== 0) {
+      stars = _.dropRight(stars);
+      stars.push(<IconButton
+        iconClassName="fa fa-star-half-o"
+        iconStyle={{
+          color: cyan400,
+        }}
+        key={0.5}
+        style={{
+          margin: -10,
+        }}
+      />);
+    }
+    return stars;
+  }
+
   render() {
+    let infoWindow = '';
+    const category = this.props.markerType[0];
+    if (category === 0) {
+      infoWindow = <span>${this.state.place['2017-09']}</span>;
+    } else if (category === 1) {
+      infoWindow = (
+        <div style={{ overflow: 'hidden' }}>
+          {this.state.place.name}<br />
+          {this.state.place.address}<br />
+          {this.renderStars(this.state.place.star)}
+        </div>
+      );
+    }
+
     return (
       <GMap
         markers={this.state.markers}
         center={this.state.center}
-        infoWindow={<p>${this.state.place['2017-09']}</p>}
+        infoWindow={infoWindow}
         infoWindowOpen={this.state.infoWindowOpen}
       />
     );
