@@ -98,6 +98,7 @@ class SearchResults extends Component {
                   ),
                 )}
                 primaryText={category}
+                primaryTogglesNestedList
               />
             ))}
             onClick={() => this.props.onClick([1, -1])}

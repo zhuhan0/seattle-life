@@ -117,26 +117,18 @@ class MapComponent extends React.PureComponent {
     for (i = 0; i < number; i += 1) {
       stars.push(<IconButton
         iconClassName="fa fa-star"
-        iconStyle={{
-          color: cyan400,
-        }}
+        iconStyle={{ color: cyan400 }}
         key={i}
-        style={{
-          margin: -10,
-        }}
+        style={{ margin: -10 }}
       />);
     }
     if (number % 1 !== 0) {
       stars = _.dropRight(stars);
       stars.push(<IconButton
         iconClassName="fa fa-star-half-o"
-        iconStyle={{
-          color: cyan400,
-        }}
+        iconStyle={{ color: cyan400 }}
         key={0.5}
-        style={{
-          margin: -10,
-        }}
+        style={{ margin: -10 }}
       />);
     }
     return stars;
