@@ -1,3 +1,5 @@
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -63,6 +65,7 @@ class SearchResults extends Component {
       const unique = _.uniqBy(value, '_id');
       mergedRestaurants[key] = unique;
     });
+    // console.log(mergedRestaurants);
 
     return (
       <Paper
@@ -71,7 +74,7 @@ class SearchResults extends Component {
           height: '87%',
           overflow: 'scroll',
           position: 'absolute',
-          width: '20%',
+          width: '25%',
         }}
         zDepth={1}
       >
@@ -93,9 +96,16 @@ class SearchResults extends Component {
           <Divider />
           <ListItem
             leftIcon={<MapsRestaurant color={amber400} />}
-            nestedItems={_.map(_.keys(mergedRestaurants), (category, index) => (
+            nestedItems={_.map(_.sortBy(_.keys(mergedRestaurants)), (category, index) => (
               <ListItem
                 key={index}
+                nestedItems={_.map(_.sortBy(mergedRestaurants[category]), (restaurant, ind) => (
+                  <ListItem
+                    key={ind}
+                    onClick={() => this.props.onClick([1, restaurant._id])}
+                    primaryText={<span><b>{restaurant.name}</b>, {restaurant.address}</span>}
+                  />
+                ))}
                 primaryText={category}
               />
             ))}

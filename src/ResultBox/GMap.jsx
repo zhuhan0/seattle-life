@@ -19,7 +19,7 @@ const GMap = compose(
           position: 'absolute',
           height: '87%',
           right: 0,
-          width: '80%',
+          width: '75%',
           zIndex: -1,
         }}
       >
@@ -109,6 +109,7 @@ class MapComponent extends React.PureComponent {
   }
 
   render() {
+    console.log(this.state.markers);
     return (
       <GMap
         markers={this.state.markers}
