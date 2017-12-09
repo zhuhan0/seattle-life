@@ -76,6 +76,7 @@ class MapComponent extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.searchResults !== nextProps.searchResults) {
       this.setState({
+        category: 0,
         infoWindowOpen: [],
         markers: nextProps.searchResults.houses,
       });
