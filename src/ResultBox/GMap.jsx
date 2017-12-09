@@ -1,4 +1,5 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+/* global window */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -19,7 +20,7 @@ const GMap = compose(
       <div
         style={{
           position: 'absolute',
-          height: '87%',
+          height: window.innerHeight - 120,
           right: 0,
           width: '75%',
           zIndex: -1,

@@ -1,4 +1,5 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+/* global window */
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -80,7 +81,7 @@ class SearchResults extends Component {
       <Paper
         style={{
           fontSize: 18,
-          height: '87%',
+          height: window.innerHeight - 120,
           overflow: 'scroll',
           position: 'absolute',
           width: '25%',
