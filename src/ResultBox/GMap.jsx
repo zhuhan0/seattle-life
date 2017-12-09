@@ -114,6 +114,10 @@ class MapComponent extends React.Component {
   }
 
   handleMarkerClick = (id) => {
+    if (this.state.category === 3) {
+      return;
+    }
+
     const { infoWindowOpen } = this.state;
     if (_.includes(infoWindowOpen, id)) {
       _.remove(infoWindowOpen, n => n === id);
@@ -191,7 +195,7 @@ class MapComponent extends React.Component {
 }
 
 MapComponent.defaultProps = {
-  markerType: 0,
+  markerType: [0, -1],
 };
 
 MapComponent.propTypes = {

@@ -85,6 +85,7 @@ class SearchResults extends Component {
           overflow: 'scroll',
           position: 'absolute',
           width: '25%',
+          zIndex: -1,
         }}
         zDepth={1}
       >

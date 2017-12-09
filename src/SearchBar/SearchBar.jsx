@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import PlacesAutocomplete from 'react-places-autocomplete';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { AutoComplete, IconButton, Paper, Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui';
@@ -74,9 +75,26 @@ class SearchBar extends React.Component {
                 alignItems: 'center',
                 display: 'flex',
                 justifyContent: 'space-between',
-                width: 800,
+                width: 860,
               }}
             >
+              {/* <PlacesAutocomplete
+                inputProps={{
+                  onChange: this.handleUpdateInput,
+                  placeholder: 'Type anywhere within Seattle (city, address, zipcode, etc.)',
+                  value: this.state.searchText,
+                }}
+                styles={{
+                  autocompleteContainer: {
+                    width: 424,
+                  },
+                  root: {
+                    display: 'inline-block',
+                    position: 'relative',
+                    width: 400,
+                  },
+                }}
+              /> */}
               <AutoComplete
                 hintText="Type anywhere within Seattle (city, address, zipcode, etc.)"
                 dataSource={this.state.dataSource}

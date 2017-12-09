@@ -6,7 +6,7 @@ class ResultBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      markerType: 0,
+      markerType: [0, -1],
     };
   }
 
