@@ -23,7 +23,7 @@ const utilities = [
 
 const crimes = [
   'ASSAULTS',
-  'PERSONS - LOST, FOUND, MISSING',
+  'AUTO THEFTS',
   'RESIDENTIAL BURGLARIES',
   'ROBBERY',
   'SEX OFFENSE (NO RAPE)',

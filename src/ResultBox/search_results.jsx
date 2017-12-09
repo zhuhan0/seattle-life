@@ -74,6 +74,7 @@ class SearchResults extends Component {
     });
 
     const utilityGroups = _.groupBy(this.props.searchResults.utilities, 'city feature');
+    const crimeGroups = _.groupBy(this.props.searchResults.crimes, 'crime');
 
     return (
       <Paper
@@ -99,27 +100,38 @@ class SearchResults extends Component {
               />
             ))}
             onClick={() => this.props.onClick([0, -1])}
-            primaryText={numHouses === 1 ? `${numHouses} House` : `${numHouses} Houses`}
+            primaryText={
+              numHouses === 1 ?
+                <span><b>{numHouses}</b> House</span> : <span><b>{numHouses}</b> Houses</span>
+            }
           />
           <Divider />
           <ListItem
             leftIcon={<MapsRestaurant color={amber400} />}
             nestedItems={this.getNestedItems(restaurantGroups, 1)}
             onClick={() => this.props.onClick([1, -1])}
-            primaryText={`${this.showRestaurants()} Restaurants`}
+            primaryText={<span><b>{this.showRestaurants()}</b> Restaurants</span>}
           />
           <Divider />
           <ListItem
             leftIcon={<NotificationPower color={green400} />}
             nestedItems={this.getNestedItems(utilityGroups, 2)}
             onClick={() => this.props.onClick([2, -1])}
-            primaryText={`${this.showUtilities()} Utilities`}
+            primaryText={<span><b>{this.showUtilities()}</b> Utilities</span>}
           />
           <Divider />
           <ListItem
             leftIcon={<ActionReportProblem color={darkBlack} />}
+            nestedItems={_.map(_.sortBy(_.keys(crimeGroups)), (key, index) => (
+              <ListItem
+                key={index}
+                primaryText={
+                  <span><b>{crimeGroups[key].length}</b> {_.startCase(_.lowerCase(key))}</span>
+                }
+              />
+            ))}
             onClick={() => this.props.onClick([3, -1])}
-            primaryText={`${this.showCrimes()} Crimes`}
+            primaryText={<span><b>{this.showCrimes()}</b> Crimes</span>}
           />
           <Divider />
         </List>
