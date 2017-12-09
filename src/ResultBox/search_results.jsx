@@ -12,6 +12,24 @@ import MapsRestaurant from 'material-ui/svg-icons/maps/restaurant';
 import NotificationPower from 'material-ui/svg-icons/notification/power';
 
 class SearchResults extends Component {
+  getNestedItems = (groups, category) => _.map(_.sortBy(_.keys(groups)), (key, index) => (
+    <ListItem
+      key={index}
+      nestedItems={_.map(
+        _.sortBy(groups[key], item => _.lowerCase(item.name)),
+        (item, ind) => (
+          <ListItem
+            key={ind}
+            onClick={() => this.props.onClick([category, item.id || item._id])}
+            primaryText={<span><b>{item.name}</b>, {item.address}</span>}
+          />
+        ),
+      )}
+      primaryText={key}
+      primaryTogglesNestedList
+    />
+  ));
+
   showCrimes() {
     if (this.props.searchResults.length !== 0) {
       return this.props.searchResults.crimes.length;
@@ -44,16 +62,18 @@ class SearchResults extends Component {
     const numHouses = this.showHouses();
 
     const { restaurants } = this.props.searchResults;
-    const groups = {};
+    const restaurantGroups = {};
     _.forEach(restaurants, (restaurant) => {
       _.forEach(restaurant.category, (category) => {
-        if (_.includes(_.keys(groups), category.title)) {
-          groups[category.title].push(restaurant);
+        if (_.includes(_.keys(restaurantGroups), category.title)) {
+          restaurantGroups[category.title].push(restaurant);
         } else {
-          groups[category.title] = [restaurant];
+          restaurantGroups[category.title] = [restaurant];
         }
       });
     });
+
+    const utilityGroups = _.groupBy(this.props.searchResults.utilities, 'city feature');
 
     return (
       <Paper
@@ -84,29 +104,14 @@ class SearchResults extends Component {
           <Divider />
           <ListItem
             leftIcon={<MapsRestaurant color={amber400} />}
-            nestedItems={_.map(_.sortBy(_.keys(groups)), (category, index) => (
-              <ListItem
-                key={index}
-                nestedItems={_.map(
-                  _.sortBy(groups[category], restaurant => _.lowerCase(restaurant.name)),
-                  (restaurant, ind) => (
-                    <ListItem
-                      key={ind}
-                      onClick={() => this.props.onClick([1, restaurant._id])}
-                      primaryText={<span><b>{restaurant.name}</b>, {restaurant.address}</span>}
-                    />
-                  ),
-                )}
-                primaryText={category}
-                primaryTogglesNestedList
-              />
-            ))}
+            nestedItems={this.getNestedItems(restaurantGroups, 1)}
             onClick={() => this.props.onClick([1, -1])}
             primaryText={`${this.showRestaurants()} Restaurants`}
           />
           <Divider />
           <ListItem
             leftIcon={<NotificationPower color={green400} />}
+            nestedItems={this.getNestedItems(utilityGroups, 2)}
             onClick={() => this.props.onClick([2, -1])}
             primaryText={`${this.showUtilities()} Utilities`}
           />

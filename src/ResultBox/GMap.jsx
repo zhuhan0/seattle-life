@@ -162,6 +162,16 @@ class MapComponent extends React.Component {
           </div>
         );
       });
+    } else if (category === 2) {
+      console.log(this.state.markers);
+      _.forEach(this.state.markers, (place) => {
+        infoWindow[place.id] = (
+          <div style={{ overflow: 'hidden' }}>
+            {place.name}<br />
+            {place.address}
+          </div>
+        );
+      });
     }
 
     return (
