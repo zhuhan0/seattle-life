@@ -9,8 +9,12 @@ import { cyan400 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
 import { GoogleMap, InfoWindow, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
+import houseIcon from '../icons/ic_home_black_36px.svg';
+import restaurantIcon from '../icons/ic_restaurant_black_36px.svg';
+import utilityIcon from '../icons/ic_power_black_36px.svg';
+import crimeIcon from '../icons/ic_report_problem_black_36px.svg';
 
-const { MarkerClusterer } = require('react-google-maps/lib/components/addons/MarkerClusterer');
+// const { MarkerClusterer } = require('react-google-maps/lib/components/addons/MarkerClusterer');
 
 const GMap = compose(
   withProps({
@@ -35,34 +39,31 @@ const GMap = compose(
   withGoogleMap,
 )(props => (
   <GoogleMap
-    defaultZoom={13}
     center={props.center}
+    defaultZoom={13}
   >
-    <MarkerClusterer
-      averageCenter
-      enableRetinaIcons
-      gridSize={60}
-    >
-      {_.map((props.markers || []), marker => (
-        <Marker
-          key={marker.id || marker._id}
-          onClick={() => props.onMarkerClick(marker.id || marker._id)}
-          position={{ lat: marker.lat, lng: marker.lng }}
-        >
-          {props.infoWindowOpen.includes(marker.id || marker._id) &&
-            <InfoWindow>{props.infoWindow[marker.id || marker._id]}</InfoWindow>}
-        </Marker>
-      ))}
-    </MarkerClusterer>
+    {_.map((props.markers || []), marker => (
+      <Marker
+        key={marker.id || marker._id}
+        icon={props.icon}
+        onClick={() => props.onMarkerClick(marker.id || marker._id)}
+        position={{ lat: marker.lat, lng: marker.lng }}
+      >
+        {props.infoWindowOpen.includes(marker.id || marker._id) &&
+          <InfoWindow>{props.infoWindow[marker.id || marker._id]}</InfoWindow>}
+      </Marker>
+    ))}
   </GoogleMap>
 ));
 
 const categories = ['houses', 'restaurants', 'utilities', 'crimes'];
+const icons = [houseIcon, restaurantIcon, utilityIcon, crimeIcon];
 
 class MapComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      category: 0,
       center: {
         lat: 47.608013,
         lng: -122.335167,
@@ -94,6 +95,7 @@ class MapComponent extends React.Component {
         infoWindowOpen.push(newPlace.id || newPlace._id);
 
         this.setState({
+          category: index,
           center: {
             lat: newPlace.lat,
             lng: newPlace.lng,
@@ -103,6 +105,7 @@ class MapComponent extends React.Component {
         });
       } else {
         this.setState({
+          category: index,
           infoWindowOpen,
           markers: category,
         });
@@ -178,6 +181,7 @@ class MapComponent extends React.Component {
       <GMap
         markers={this.state.markers}
         center={this.state.center}
+        icon={icons[this.state.category]}
         infoWindow={infoWindow}
         infoWindowOpen={this.state.infoWindowOpen}
         onMarkerClick={this.handleMarkerClick}
