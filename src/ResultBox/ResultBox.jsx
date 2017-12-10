@@ -32,7 +32,6 @@ class ResultBox extends React.Component {
   }
 
   render() {
-    console.log(this.state.markedCategory, this.state.markedPlace);
     return (
       <div style={{ display: 'flex' }}>
         <SearchResults onClick={this.handleClick} />
