@@ -44,13 +44,13 @@ const GMap = compose(
   >
     {_.map((props.markers || []), marker => (
       <Marker
-        key={marker.id || marker._id}
-        icon={props.icon}
-        onClick={() => props.onMarkerClick(marker.id || marker._id)}
+        key={marker._id}
+        icon={marker.icon}
+        onClick={() => props.onMarkerClick(marker._id)}
         position={{ lat: marker.lat, lng: marker.lng }}
       >
-        {props.infoWindowOpen.includes(marker.id || marker._id) &&
-          <InfoWindow>{props.infoWindow[marker.id || marker._id]}</InfoWindow>}
+        {props.infoWindowOpen.includes(marker._id) &&
+          <InfoWindow>{props.infoWindow[marker._id]}</InfoWindow>}
       </Marker>
     ))}
   </GoogleMap>
@@ -63,7 +63,6 @@ class MapComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      category: 0,
       center: {
         lat: 47.608013,
         lng: -122.335167,
@@ -74,15 +73,23 @@ class MapComponent extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { houses } = nextProps.searchResults;
+    _.forEach(houses, (house) => {
+      _.assign(house, { category: 0, icon: icons[0] });
+    });
+
     if (this.props.searchResults !== nextProps.searchResults) {
       this.setState({
-        category: 0,
         infoWindowOpen: [],
         markers: nextProps.searchResults.houses,
       });
     } else {
       const index = nextProps.markerType[0];
       const category = this.props.searchResults[categories[index]];
+      _.forEach(category, (item) => {
+        _.assign(item, { category: index, icon: icons[index] });
+      });
+      const markers = index === 0 ? category : _.concat(houses, category);
       const infoWindowOpen = [];
 
       if (nextProps.markerType[1] !== -1) {
@@ -91,24 +98,22 @@ class MapComponent extends React.Component {
 
         const newPlace = _.find(
           this.props.searchResults[categories[first]],
-          place => (place.id || place._id) === second,
+          place => (place._id) === second,
         );
-        infoWindowOpen.push(newPlace.id || newPlace._id);
+        infoWindowOpen.push(newPlace._id);
 
         this.setState({
-          category: index,
           center: {
             lat: newPlace.lat,
             lng: newPlace.lng,
           },
           infoWindowOpen,
-          markers: category,
+          markers,
         });
       } else {
         this.setState({
-          category: index,
           infoWindowOpen,
-          markers: category,
+          markers,
         });
       }
     }
@@ -156,37 +161,31 @@ class MapComponent extends React.Component {
 
   render() {
     const infoWindow = {};
-    const category = this.props.markerType[0];
-    if (category === 0) {
-      _.forEach(this.state.markers, (place) => {
-        infoWindow[place.id] = <span>${place['2017-09']}</span>;
-      });
-    } else if (category === 1) {
-      _.forEach(this.state.markers, (place) => {
-        infoWindow[place._id] = (
+    _.forEach(this.state.markers, (marker) => {
+      if (marker.category === 0) {
+        infoWindow[marker._id] = <span>${marker['2017-09']}</span>;
+      } else if (marker.category === 1) {
+        infoWindow[marker._id] = (
           <div style={{ overflow: 'hidden' }}>
-            {place.name}<br />
-            {place.address}<br />
-            {this.renderStars(place.star)}
+            {marker.name}<br />
+            {marker.address}<br />
+            {this.renderStars(marker.star)}
           </div>
         );
-      });
-    } else if (category === 2) {
-      _.forEach(this.state.markers, (place) => {
-        infoWindow[place.id] = (
+      } else if (marker.category === 2) {
+        infoWindow[marker._id] = (
           <div style={{ overflow: 'hidden' }}>
-            {place.name}<br />
-            {place.address}
+            {marker.name}<br />
+            {marker.address}
           </div>
         );
-      });
-    }
+      }
+    });
 
     return (
       <GMap
         markers={this.state.markers}
         center={this.state.center}
-        icon={icons[this.state.category]}
         infoWindow={infoWindow}
         infoWindowOpen={this.state.infoWindowOpen}
         onMarkerClick={this.handleMarkerClick}

@@ -21,7 +21,7 @@ class SearchResults extends Component {
         (item, ind) => (
           <ListItem
             key={ind}
-            onClick={() => this.props.onClick([category, item.id || item._id])}
+            onClick={() => this.props.onClick([category, item._id])}
             primaryText={<span><b>{item.name}</b>, {item.address}</span>}
           />
         ),
@@ -97,7 +97,7 @@ class SearchResults extends Component {
             nestedItems={_.map(this.props.searchResults.houses, (house, index) => (
               <ListItem
                 key={index}
-                onClick={() => this.props.onClick([0, house.id])}
+                onClick={() => this.props.onClick([0, house._id])}
                 primaryText={`${house.city}, ${house.postcode}`}
               />
             ))}
