@@ -130,8 +130,6 @@ class MapComponent extends React.Component {
     });
   }
 
-  average = data => _.round(_.sum(data) / data.length);
-
   renderStars = (number) => {
     let stars = [];
     let i = 0;
