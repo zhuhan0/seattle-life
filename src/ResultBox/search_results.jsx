@@ -82,7 +82,7 @@ class SearchResults extends Component {
         style={{
           fontSize: 18,
           height: window.innerHeight - 120,
-          overflow: 'scroll',
+          overflowY: 'scroll',
           position: 'absolute',
           width: '25%',
           zIndex: -1,
