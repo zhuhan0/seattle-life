@@ -9,6 +9,7 @@ import { cyan400 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
 import { GoogleMap, InfoWindow, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
+import { Line, LineChart, XAxis, YAxis } from 'recharts';
 import houseIcon from '../icons/ic_home_black_36px.svg';
 import restaurantIcon from '../icons/ic_restaurant_black_36px.svg';
 import utilityIcon from '../icons/ic_power_black_36px.svg';
@@ -157,7 +158,29 @@ class MapComponent extends React.Component {
     const infoWindow = {};
     _.forEach(this.state.markers, (marker) => {
       if (marker.category === 0) {
-        infoWindow[marker._id] = <span>${marker['2017-09']}</span>;
+        const lineData = [
+          { name: '2017-01', price: marker['2017-01'] },
+          { name: '2017-02', price: marker['2017-02'] },
+          { name: '2017-03', price: marker['2017-03'] },
+          { name: '2017-04', price: marker['2017-04'] },
+          { name: '2017-05', price: marker['2017-05'] },
+          { name: '2017-06', price: marker['2017-06'] },
+          { name: '2017-07', price: marker['2017-07'] },
+          { name: '2017-08', price: marker['2017-08'] },
+          { name: '2017-09', price: marker['2017-09'] },
+        ];
+        // infoWindow[marker._id] = <span>${marker['2017-09']}</span>;
+        infoWindow[marker._id] = (
+          <LineChart
+            data={lineData}
+            height={250}
+            width={500}
+          >
+            <Line type="monotone" dataKey="price" />
+            <XAxis dataKey="name" />
+            <YAxis domain={['dataMin', 'dataMax']}/>
+          </LineChart>
+        );
       } else if (marker.category === 1) {
         infoWindow[marker._id] = (
           <div style={{ overflow: 'hidden' }}>
