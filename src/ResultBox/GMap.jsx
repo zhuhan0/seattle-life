@@ -175,12 +175,12 @@ class MapComponent extends React.Component {
         infoWindow[marker._id] = (
           <LineChart
             data={lineData}
-            height={100}
-            width={100}
+            height={250}
+            width={500}
           >
             <Line type="monotone" dataKey="price" />
             <XAxis dataKey="name" />
-            <YAxis />
+            <YAxis domain={['dataMin', 'dataMax']}/>
           </LineChart>
         );
       } else if (marker.category === 1) {
