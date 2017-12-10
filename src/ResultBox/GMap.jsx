@@ -77,45 +77,39 @@ class MapComponent extends React.Component {
     _.forEach(houses, (house) => {
       _.assign(house, { category: 0, icon: icons[0] });
     });
+    let others = [];
+    _.forEach(nextProps.markedCategory, (index, ind) => {
+      if (ind === 0) {
+        return;
+      }
 
-    if (this.props.searchResults !== nextProps.searchResults) {
-      this.setState({
-        infoWindowOpen: [],
-        markers: nextProps.searchResults.houses,
-      });
-    } else {
-      const index = nextProps.markerType[0];
       const category = this.props.searchResults[categories[index]];
       _.forEach(category, (item) => {
         _.assign(item, { category: index, icon: icons[index] });
       });
-      const markers = index === 0 ? category : _.concat(houses, category);
-      const infoWindowOpen = [];
+      others = _.concat(others, category);
+    });
+    const markers = _.concat(houses, others);
+    const infoWindowOpen = [];
 
-      if (nextProps.markerType[1] !== -1) {
-        const first = nextProps.markerType[0];
-        const second = nextProps.markerType[1];
+    if (nextProps.markedPlace !== -1) {
+      const newPlace = _.find(markers, place => (place._id) === nextProps.markedPlace);
+      infoWindowOpen.push(newPlace._id);
 
-        const newPlace = _.find(
-          this.props.searchResults[categories[first]],
-          place => (place._id) === second,
-        );
-        infoWindowOpen.push(newPlace._id);
-
-        this.setState({
-          center: {
-            lat: newPlace.lat,
-            lng: newPlace.lng,
-          },
-          infoWindowOpen,
-          markers,
-        });
-      } else {
-        this.setState({
-          infoWindowOpen,
-          markers,
-        });
-      }
+      this.setState({
+        center: {
+          lat: newPlace.lat,
+          lng: newPlace.lng,
+        },
+        infoWindowOpen,
+        markers,
+      });
+    } else if (this.props.searchResults !== nextProps.searchResults ||
+      this.props.markedCategory !== nextProps.markedCategory) {
+      this.setState({
+        infoWindowOpen: [],
+        markers,
+      });
     }
   }
 
@@ -194,15 +188,12 @@ class MapComponent extends React.Component {
   }
 }
 
-MapComponent.defaultProps = {
-  markerType: [0, -1],
-};
-
 MapComponent.propTypes = {
-  markerType: PropTypes.oneOfType([
-    PropTypes.array,
+  markedCategory: PropTypes.arrayOf(PropTypes.number).isRequired,
+  markedPlace: PropTypes.oneOfType([
     PropTypes.number,
-  ]),
+    PropTypes.string,
+  ]).isRequired,
   searchResults: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.shape,

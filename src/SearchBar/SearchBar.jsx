@@ -87,6 +87,7 @@ class SearchBar extends React.Component {
                   }}
                   onEnterKeyDown={this.handleNewRequest}
                   options={{
+                    // eslint-disable-next-line
                     location: new google.maps.LatLng(47.608013, -122.335167),
                     radius: 40000,
                   }}
