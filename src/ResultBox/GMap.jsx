@@ -13,6 +13,7 @@ import houseIcon from '../icons/ic_home_black_36px.svg';
 import restaurantIcon from '../icons/ic_restaurant_black_36px.svg';
 import utilityIcon from '../icons/ic_power_black_36px.svg';
 import crimeIcon from '../icons/ic_report_problem_black_36px.svg';
+import { Sparklines, SparklinesLine, SparklinesReferenceLine } from 'react-sparklines';
 
 // const { MarkerClusterer } = require('react-google-maps/lib/components/addons/MarkerClusterer');
 
@@ -153,11 +154,34 @@ class MapComponent extends React.Component {
     return stars;
   }
 
+  average(data) {
+    return _.round(_.sum(data) / data.length);
+  }
+
   render() {
     const infoWindow = {};
     _.forEach(this.state.markers, (marker) => {
       if (marker.category === 0) {
-        infoWindow[marker._id] = <span>${marker['2017-09']}</span>;
+        var prices = [];
+        prices.push(marker['2017-01']);
+        prices.push(marker['2017-02']);
+        prices.push(marker['2017-03']);
+        prices.push(marker['2017-04']);
+        prices.push(marker['2017-05']);
+        prices.push(marker['2017-06']);
+        prices.push(marker['2017-07']);
+        prices.push(marker['2017-08']);
+        prices.push(marker['2017-09']);
+        // infoWindow[marker._id] = <span>${marker['2017-09']}</span>;
+        // console.log(prices);
+        infoWindow[marker._id] = (
+          <div>
+            <Sparklines height={120} width={100} data={prices} >
+                <SparklinesLine color="orange" />
+            </Sparklines>
+          </div>
+        );
+
       } else if (marker.category === 1) {
         infoWindow[marker._id] = (
           <div style={{ overflow: 'hidden' }}>
