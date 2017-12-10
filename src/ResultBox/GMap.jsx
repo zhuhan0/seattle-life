@@ -9,7 +9,7 @@ import { cyan400 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
 import { GoogleMap, InfoWindow, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
-import { Line, LineChart, XAxis, YAxis } from 'recharts';
+import { Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import houseIcon from '../icons/ic_home_black_36px.svg';
 import restaurantIcon from '../icons/ic_restaurant_black_36px.svg';
 import utilityIcon from '../icons/ic_power_black_36px.svg';
@@ -171,15 +171,18 @@ class MapComponent extends React.Component {
         ];
         // infoWindow[marker._id] = <span>${marker['2017-09']}</span>;
         infoWindow[marker._id] = (
-          <LineChart
-            data={lineData}
-            height={250}
-            width={500}
-          >
-            <Line type="monotone" dataKey="price" />
-            <XAxis dataKey="name" />
-            <YAxis domain={['dataMin', 'dataMax']}/>
-          </LineChart>
+          <div style={{ overflow: 'hidden' }}>
+            <LineChart
+              data={lineData}
+              height={250}
+              width={500}
+            >
+              <Line type="monotone" dataKey="price" />
+              <Tooltip />
+              <XAxis dataKey="name" />
+              <YAxis domain={['dataMin', 'dataMax']} />
+            </LineChart>
+          </div>
         );
       } else if (marker.category === 1) {
         infoWindow[marker._id] = (

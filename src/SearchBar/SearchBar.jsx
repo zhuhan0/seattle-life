@@ -101,7 +101,6 @@ class SearchBar extends React.Component {
         'Ocp-Apim-Subscription-Key': '19894c784f4f4134971b73d9227fa628',
       },
     }).then((response) => {
-      console.log(response);
       this.setState({
         bingResult: response.data.webPages.value,
         dialogOpen: true,
