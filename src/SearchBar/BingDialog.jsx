@@ -4,42 +4,38 @@ import _ from 'lodash';
 import { Dialog } from 'material-ui';
 import { green800 } from 'material-ui/styles/colors';
 
-class BingDialog extends React.Component {
-  render() {
-    return (
-      <Dialog
-        autoScrollBodyContent
-        onRequestClose={this.props.onRequestClose}
-        open={this.props.open}
-      >
-        <ul style={{ listStyleType: 'none' }}>
-          {_.map(this.props.result, (webpage, index) => (
-            <li key={index}>
-              <a
-                href={webpage.displayUrl}
-                style={{ fontSize: 18 }}
-                target="_blank"
-              >
-                {webpage.name}
-              </a>
-              <br />
-              <span
-                style={{
-                  color: green800,
-                  fontSize: 14,
-                }}
-              >
-                {webpage.displayUrl}
-              </span>
-              <br />
-              {webpage.snippet}<br /><br />
-            </li>
-          ))}
-        </ul>
-      </Dialog>
-    );
-  }
-}
+const BingDialog = props => (
+  <Dialog
+    autoScrollBodyContent
+    onRequestClose={props.onRequestClose}
+    open={props.open}
+  >
+    <ul style={{ listStyleType: 'none' }}>
+      {_.map(props.result, (webpage, index) => (
+        <li key={index}>
+          <a
+            href={webpage.displayUrl}
+            style={{ fontSize: 18 }}
+            target="_blank"
+          >
+            {webpage.name}
+          </a>
+          <br />
+          <span
+            style={{
+              color: green800,
+              fontSize: 14,
+            }}
+          >
+            {webpage.displayUrl}
+          </span>
+          <br />
+          {webpage.snippet}<br /><br />
+        </li>
+      ))}
+    </ul>
+  </Dialog>
+);
 
 BingDialog.defaultProps = {
   result: [],
