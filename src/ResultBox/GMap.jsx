@@ -1,13 +1,22 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+/* global window */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import pluralize from 'pluralize';
+import { IconButton } from 'material-ui';
+import { cyan400 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
 import { GoogleMap, InfoWindow, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
+import { Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
+import houseIcon from '../icons/ic_home_black_36px.svg';
+import restaurantIcon from '../icons/ic_restaurant_black_36px.svg';
+import utilityIcon from '../icons/ic_power_black_36px.svg';
+import crimeIcon from '../icons/ic_report_problem_black_36px.svg';
 
-const { MarkerClusterer } = require('react-google-maps/lib/components/addons/MarkerClusterer');
+// const { MarkerClusterer } = require('react-google-maps/lib/components/addons/MarkerClusterer');
 
 const GMap = compose(
   withProps({
@@ -17,9 +26,9 @@ const GMap = compose(
       <div
         style={{
           position: 'absolute',
-          height: '87%',
+          height: window.innerHeight - 120,
           right: 0,
-          width: '80%',
+          width: '75%',
           zIndex: -1,
         }}
       >
@@ -32,30 +41,27 @@ const GMap = compose(
   withGoogleMap,
 )(props => (
   <GoogleMap
-    defaultZoom={13}
     center={props.center}
+    defaultZoom={13}
   >
-    <MarkerClusterer
-      averageCenter
-      enableRetinaIcons
-      gridSize={60}
-    >
-      {_.map((props.markers || []), marker => (
-        <Marker
-          key={marker.id || marker._id}
-          position={{ lat: marker.lat, lng: marker.lng }}
-        >
-          {props.infoWindowOpen.includes(marker.id || marker._id) &&
-            <InfoWindow>{props.infoWindow}</InfoWindow>}
-        </Marker>
-      ))}
-    </MarkerClusterer>
+    {_.map((props.markers || []), marker => (
+      <Marker
+        key={marker._id}
+        icon={marker.icon}
+        onClick={() => props.onMarkerClick(marker._id)}
+        position={{ lat: marker.lat, lng: marker.lng }}
+      >
+        {props.infoWindowOpen.includes(marker._id) &&
+          <InfoWindow>{props.infoWindow[marker._id]}</InfoWindow>}
+      </Marker>
+    ))}
   </GoogleMap>
 ));
 
 const categories = ['houses', 'restaurants', 'utilities', 'crimes'];
+const icons = [houseIcon, restaurantIcon, utilityIcon, crimeIcon];
 
-class MapComponent extends React.PureComponent {
+class MapComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,70 +71,164 @@ class MapComponent extends React.PureComponent {
       },
       infoWindowOpen: [],
       markers: [],
-      place: {},
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.searchResults !== nextProps.searchResults) {
+    const { houses } = nextProps.searchResults;
+    _.forEach(houses, (house) => {
+      _.assign(house, { type: 0, icon: icons[0] });
+    });
+    let others = [];
+    _.forEach(nextProps.markedCategory, (index, ind) => {
+      if (ind === 0) {
+        return;
+      }
+
+      const category = this.props.searchResults[categories[index]];
+      _.forEach(category, (item) => {
+        _.assign(item, { type: index, icon: icons[index] });
+      });
+      others = _.concat(others, category);
+    });
+    const markers = _.concat(houses, others);
+    const infoWindowOpen = [];
+
+    if (nextProps.markedPlace !== -1) {
+      const newPlace = _.find(markers, place => (place._id) === nextProps.markedPlace);
+      infoWindowOpen.push(newPlace._id);
+
+      this.setState({
+        center: {
+          lat: newPlace.lat,
+          lng: newPlace.lng,
+        },
+        infoWindowOpen,
+        markers,
+      });
+    } else if (this.props.searchResults !== nextProps.searchResults ||
+      this.props.markedCategory !== nextProps.markedCategory) {
       this.setState({
         infoWindowOpen: [],
-        markers: nextProps.searchResults.houses,
+        markers,
       });
-    } else {
-      const index = nextProps.markerType[0];
-      const places = this.props.searchResults[categories[index]];
-      const infoWindowOpen = [];
-
-      if (nextProps.markerType[1] !== -1) {
-        const first = nextProps.markerType[0];
-        const second = nextProps.markerType[1];
-
-        const newPlace = _.find(
-          this.props.searchResults[categories[first]],
-          place => (place.id || place._id) === second,
-        );
-        infoWindowOpen.push(newPlace.id || newPlace._id);
-
-        this.setState({
-          center: {
-            lat: newPlace.lat,
-            lng: newPlace.lng,
-          },
-          infoWindowOpen,
-          markers: places,
-          place: newPlace,
-        });
-      } else {
-        this.setState({
-          infoWindowOpen,
-          markers: places,
-        });
-      }
     }
   }
 
+  handleMarkerClick = (id) => {
+    if (this.state.type === 3) {
+      return;
+    }
+
+    const { infoWindowOpen } = this.state;
+    if (_.includes(infoWindowOpen, id)) {
+      _.remove(infoWindowOpen, n => n === id);
+    } else {
+      infoWindowOpen.push(id);
+    }
+    this.setState({
+      infoWindowOpen,
+    });
+  }
+
+  renderStars = (number) => {
+    let stars = [];
+    let i = 0;
+
+    for (i = 0; i < number; i += 1) {
+      stars.push(<IconButton
+        iconClassName="fa fa-star"
+        iconStyle={{ color: cyan400 }}
+        key={i}
+        style={{ margin: -10 }}
+      />);
+    }
+    if (number % 1 !== 0) {
+      stars = _.dropRight(stars);
+      stars.push(<IconButton
+        iconClassName="fa fa-star-half-o"
+        iconStyle={{ color: cyan400 }}
+        key={0.5}
+        style={{ margin: -10 }}
+      />);
+    }
+    return stars;
+  }
+
   render() {
+    const infoWindow = {};
+    _.forEach(this.state.markers, (marker) => {
+      if (marker.type === 0) {
+        const lineData = [
+          { name: '2017-01', price: marker['2017-01'] },
+          { name: '2017-02', price: marker['2017-02'] },
+          { name: '2017-03', price: marker['2017-03'] },
+          { name: '2017-04', price: marker['2017-04'] },
+          { name: '2017-05', price: marker['2017-05'] },
+          { name: '2017-06', price: marker['2017-06'] },
+          { name: '2017-07', price: marker['2017-07'] },
+          { name: '2017-08', price: marker['2017-08'] },
+          { name: '2017-09', price: marker['2017-09'] },
+        ];
+        // infoWindow[marker._id] = <span>${marker['2017-09']}</span>;
+        infoWindow[marker._id] = (
+          <div style={{ overflow: 'hidden' }}>
+            <LineChart
+              data={lineData}
+              height={250}
+              width={500}
+            >
+              <Line type="monotone" dataKey="price" />
+              <Tooltip />
+              <XAxis dataKey="name" />
+              <YAxis domain={['dataMin', 'dataMax']} />
+            </LineChart>
+          </div>
+        );
+      } else if (marker.type === 1) {
+        let category = '';
+        _.forEach(marker.category, (cate) => {
+          category += `${cate.title}, `;
+        });
+        category = _.trimEnd(category, ', ');
+
+        infoWindow[marker._id] = (
+          <div style={{ overflow: 'hidden' }}>
+            <b>{marker.name}</b><br />
+            {category}<br />
+            {marker.address}<br />
+            {this.renderStars(marker.star)}
+          </div>
+        );
+      } else if (marker.type === 2) {
+        infoWindow[marker._id] = (
+          <div style={{ overflow: 'hidden' }}>
+            <b>{marker.name}</b><br />
+            {pluralize.singular(marker['city feature'])}<br />
+            {marker.address}
+          </div>
+        );
+      }
+    });
+
     return (
       <GMap
         markers={this.state.markers}
         center={this.state.center}
-        infoWindow={<p>${this.state.place['2017-09']}</p>}
+        infoWindow={infoWindow}
         infoWindowOpen={this.state.infoWindowOpen}
+        onMarkerClick={this.handleMarkerClick}
       />
     );
   }
 }
 
-MapComponent.defaultProps = {
-  markerType: 0,
-};
-
 MapComponent.propTypes = {
-  markerType: PropTypes.oneOfType([
-    PropTypes.array,
+  markedCategory: PropTypes.arrayOf(PropTypes.number).isRequired,
+  markedPlace: PropTypes.oneOfType([
     PropTypes.number,
-  ]),
+    PropTypes.string,
+  ]).isRequired,
   searchResults: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.shape,
