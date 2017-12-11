@@ -4,6 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import pluralize from 'pluralize';
 import { IconButton } from 'material-ui';
 import { cyan400 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
@@ -76,7 +77,7 @@ class MapComponent extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { houses } = nextProps.searchResults;
     _.forEach(houses, (house) => {
-      _.assign(house, { category: 0, icon: icons[0] });
+      _.assign(house, { type: 0, icon: icons[0] });
     });
     let others = [];
     _.forEach(nextProps.markedCategory, (index, ind) => {
@@ -86,7 +87,7 @@ class MapComponent extends React.Component {
 
       const category = this.props.searchResults[categories[index]];
       _.forEach(category, (item) => {
-        _.assign(item, { category: index, icon: icons[index] });
+        _.assign(item, { type: index, icon: icons[index] });
       });
       others = _.concat(others, category);
     });
@@ -115,7 +116,7 @@ class MapComponent extends React.Component {
   }
 
   handleMarkerClick = (id) => {
-    if (this.state.category === 3) {
+    if (this.state.type === 3) {
       return;
     }
 
@@ -157,7 +158,7 @@ class MapComponent extends React.Component {
   render() {
     const infoWindow = {};
     _.forEach(this.state.markers, (marker) => {
-      if (marker.category === 0) {
+      if (marker.type === 0) {
         const lineData = [
           { name: '2017-01', price: marker['2017-01'] },
           { name: '2017-02', price: marker['2017-02'] },
@@ -184,18 +185,26 @@ class MapComponent extends React.Component {
             </LineChart>
           </div>
         );
-      } else if (marker.category === 1) {
+      } else if (marker.type === 1) {
+        let category = '';
+        _.forEach(marker.category, (cate) => {
+          category += `${cate.title}, `;
+        });
+        category = _.trimEnd(category, ', ');
+
         infoWindow[marker._id] = (
           <div style={{ overflow: 'hidden' }}>
-            {marker.name}<br />
+            <b>{marker.name}</b><br />
+            {category}<br />
             {marker.address}<br />
             {this.renderStars(marker.star)}
           </div>
         );
-      } else if (marker.category === 2) {
+      } else if (marker.type === 2) {
         infoWindow[marker._id] = (
           <div style={{ overflow: 'hidden' }}>
-            {marker.name}<br />
+            <b>{marker.name}</b><br />
+            {pluralize.singular(marker['city feature'])}<br />
             {marker.address}
           </div>
         );
