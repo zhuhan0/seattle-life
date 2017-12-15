@@ -208,6 +208,13 @@ class MapComponent extends React.Component {
             {marker.address}
           </div>
         );
+      } else if (marker.category === 3) {
+        infoWindow[marker._id] = (
+          <div style={{ overflow: 'hidden' }}>
+            {marker.crime}<br />
+            {marker.time}
+          </div>
+        );
       }
     });
 
